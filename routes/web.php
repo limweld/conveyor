@@ -11,14 +11,9 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+$router->get('framework', function () use ($router) {
     return $router->app->version();
 });
-
-// $router->get('conveyor',function() use ($router) {
-//     return view('conveyor/main');
-// });
-
 
 $router->get('/',function() use ($router) {
     return view('conveyor/login');
@@ -34,6 +29,10 @@ $router->get('main',function() use ($router) {
 
 $router->get('generator',function() use ($router) {
     return view('conveyor/generator');
+});
+
+$router->get('credential',function() use ($router) {
+    return view('conveyor/credential');
 });
 
 $router->group(['prefix' => 'barcode'], function() use ($router) {

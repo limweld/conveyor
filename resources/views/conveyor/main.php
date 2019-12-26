@@ -337,6 +337,9 @@
   <script src="js/angular-sanitize.min.js"></script>
   <script src="js/angular-momentjs.min.js"></script>
 
+  <script type="text/javascript" src="resources/node_modules/ngmqtt/browserMqtt.js"></script>
+  <script type="text/javascript" src="resources/node_modules/ngmqtt/ngmqtt.js"></script>
+
   <script src="js/scripts/dashboard.js"></script>
 
 </body>

@@ -1,11 +1,18 @@
-var app = angular.module('Dashboard', []);
+var app = angular.module('Dashboard', ['ngmqtt']).run(function(){
+    console.log("Angular application started");
+});
+
 app.controller('dashboard_controller',[ 
     '$scope',
     '$timeout',
+    '$interval', 
+    'ngmqtt',
     'dashboard_model',
     function(
         $scope,
         $timeout,
+        $interval, 
+        ngmqtt,
         dashboard_model
     ){
         $scope.quota_sort = {};
