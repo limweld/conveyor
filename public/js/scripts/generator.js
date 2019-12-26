@@ -16,7 +16,7 @@ app.controller('generator_controller',[
         ];
 
         $scope.ranges = [
-   //         { id : 0, value : 3 },
+    //        { id : 0, value : 3 },
             { id : 1, value : 10 },
             { id : 2, value : 20 },
             { id : 3, value : 50 },
@@ -27,13 +27,18 @@ app.controller('generator_controller',[
         $scope.unscanned = {};
         $scope.scanned = {};
         $scope.batch = {};
+        $scope.errors = {};
 
         $scope.unscanned.pagination = {};
         $scope.unscanned.pagination.state = {};
         
         $scope.scanned.pagination = {};
         $scope.scanned.pagination.state= {};
-   
+
+        $scope.errors.obj = {};
+        $scope.errors.pagination = {};
+        $scope.errors.pagination.state= {};
+
         $scope.batch.obj = {};
         $scope.batch.pagination = {};
         $scope.batch.pagination.state = {};
@@ -92,6 +97,24 @@ app.controller('generator_controller',[
             );
         }
 
+        let errors_list = function( search, page, range ){
+            generator_model.errors_list(
+                page,
+                range,
+                search,
+                function(response){
+                    $scope.errors.list = [];
+                    if(response.status == 200){
+                        $scope.errors.list = response.data;                        
+                        $scope.errors.showfrom = $scope.errors.list.length == 0 ? 0 : ((page - 1) * range) + 1;
+                        $scope.errors.showto = ((page - 1) * range) + $scope.errors.list.length;
+                        $scope.errors.search = $scope.errors.search_temp;
+                        $scope.errors.loading = false;
+                    }
+                }
+            );
+        }
+
         let batch_count = function( search ){
             $scope.batch.loading = true;
             generator_model.batch_count(
@@ -129,6 +152,20 @@ app.controller('generator_controller',[
                         $scope.scanned.totalrows = response.data.totalrows;
                         $scope.scanned.pagination.state = generator_model.pagination_state($scope.scanned.page, $scope.scanned.totalrows ,$scope.scanned.selected.value);
                         scanned_list( $scope.scanned.search_temp, $scope.scanned.page, $scope.scanned.selected.value);
+                    }
+                }
+            );
+        }
+
+        let errors_count = function( search ){
+            $scope.errors.loading = true;
+            generator_model.errors_count(
+                search,
+                function(response){
+                    if(response.status == 200){
+                        $scope.errors.totalrows = response.data.totalrows;
+                        $scope.errors.pagination.state = generator_model.pagination_state($scope.errors.page, $scope.errors.totalrows ,$scope.errors.selected.value);
+                        errors_list( $scope.errors.search_temp, $scope.errors.page, $scope.errors.selected.value);
                     }
                 }
             );
@@ -180,6 +217,20 @@ app.controller('generator_controller',[
             );            
         }
 
+        let errors_deleted = function( errors_id ){
+            generator_model.errors_deleted(
+                errors_id,
+                function(response){ console.log(response.data);
+                    if(response.status == 200){
+                        if(response.data != 0){
+                            errors_count( $scope.errors.search_temp);
+                            $("#addErrorsModal").modal('toggle');
+                        }
+                    }
+                }
+            );            
+        }
+
         let logout = function( ){
             generator_model.logout(
                 function(response){ 
@@ -222,7 +273,15 @@ app.controller('generator_controller',[
             unscanned_count($scope.unscanned.search_temp);
         }
 
+        $scope.errors.list_search = function(){  
+            $scope.errors.search_temp = $scope.errors.search;
+            errors_count( $scope.errors.search_temp);
+        }
 
+        $scope.errors.list_tab = function(){
+            $scope.errors.page = 1;
+            errors_count($scope.errors.search_temp);
+        }
         
         $scope.unscanned.pagination.first_click =  function(){
             if($scope.unscanned.pagination.state.currentPage > 1){
@@ -372,7 +431,55 @@ app.controller('generator_controller',[
                 batch_count( $scope.batch.search_temp);
             }
         }
+       
+        $scope.errors.pagination.first_click =  function(){
+            if($scope.errors.pagination.state.currentPage > 1){
+                $scope.errors.page = 1;
+                errors_count( $scope.errors.search_temp);
+            }	
+        }
+        
+        $scope.errors.pagination.previous_click =  function(){
+            if($scope.errors.pagination.state.currentPage > 1){
+                $scope.errors.page = $scope.errors.pagination.state.currentPage - 1;
+                errors_count( $scope.errors.search_temp);
+            }
+        }
+        
+        $scope.errors.pagination.previouspages_click =  function(){
+            if($scope.errors.pagination.state.currentPage > 1){
+                $scope.errors.page = $scope.errors.pagination.state.currentPageFrom - 1;
+                errors_count( $scope.errors.search_temp);
+            }
+        }
 
+        $scope.errors.pagination.pages_click = function(value){
+            $scope.errors.page = value.page;
+            errors_count( $scope.errors.search_temp);
+        }
+
+        $scope.errors.pagination.nextpages_click =  function(){
+            	
+            if($scope.errors.pagination.state.currentPage < $scope.errors.pagination.state.totalPages){
+                
+                $scope.errors.page = $scope.errors.pagination.state.currentPageTo + 1;
+                errors_count( $scope.errors.search_temp);
+            }
+        }
+        
+        $scope.errors.pagination.next_click = function(){		
+            if($scope.errors.pagination.state.currentPage < $scope.errors.pagination.state.totalPages){
+                $scope.errors.page = $scope.errors.pagination.state.currentPage + 1,
+                errors_count( $scope.errors.search_temp);
+            }
+        }
+        
+        $scope.errors.pagination.last_click = function(){
+            if( $scope.errors.pagination.state.currentPage < $scope.errors.pagination.state.totalPages){
+                $scope.errors.page = $scope.errors.pagination.state.totalPages;
+                errors_count( $scope.errors.search_temp);
+            }
+        }
 
         $scope.batch.selected_change = function( ){
             $scope.batch.page = 1;
@@ -387,6 +494,11 @@ app.controller('generator_controller',[
         $scope.scanned.selected_change = function( ){
             $scope.scanned.page = 1;
             scanned_count( $scope.scanned.search_temp);
+        }
+
+        $scope.errors.selected_change = function( ){
+            $scope.errors.page = 1;
+            errors_count( $scope.errors.search_temp);
         }
 
         $scope.batch.show_barcodes = function( value ){
@@ -449,6 +561,19 @@ app.controller('generator_controller',[
 
         }
 
+        $scope.errors.obj.modify_entry_click = function( obj ){
+            $("#addErrorsModal").modal('toggle'); 
+            $scope.errors.obj.create_title_show = "Modify"; 
+            $scope.errors.obj.delete_show = true;
+            $scope.errors.obj.loading_visibility = false;
+            $scope.errors.obj.delete_disabled = false;
+
+
+            $scope.errors.obj.created_at = obj.created_at;
+            $scope.errors.obj.id = obj.id;
+            $scope.errors.obj.barcode = obj.barcode;
+
+        }
 
         $scope.batch.obj.created_click = function(){
             
@@ -480,6 +605,13 @@ app.controller('generator_controller',[
             batch_deleted($scope.batch.obj.batch_id);
         }
 
+        $scope.errors.obj.delete_click = function(){
+            $scope.errors.obj.delete_disabled = true;
+            $scope.errors.obj.loading_visibility = true;
+
+            errors_deleted($scope.errors.obj.id);
+        }
+
         $scope.logout_click = function(){
             logout();
         }
@@ -487,14 +619,17 @@ app.controller('generator_controller',[
         $scope.scanned.selected = $scope.ranges[0];
         $scope.unscanned.selected = $scope.ranges[0];
         $scope.batch.selected = $scope.ranges[0];
+        $scope.errors.selected = $scope.ranges[0];
 
         $scope.batch.page = 1;
         $scope.unscanned.page = 1;
         $scope.scanned.page = 1;
+        $scope.errors.page = 1;
 
         batch_count( $scope.batch.search_temp);
         scanned_count( $scope.scanned.search_temp);
         unscanned_count( $scope.unscanned.search_temp);
+        errors_count( $scope.errors.search_temp);
 
     }
 ]).factory('generator_model',[
@@ -597,6 +732,25 @@ app.controller('generator_controller',[
 			);			
         }
 
+        service.errors_list = function(
+            page,
+            range,
+            search,
+			callback		
+		){
+			$http.post(
+                'conveyor/api/v1/generator/read/errors',
+                { 
+                    page : page,
+                    range : range,
+                    search : search 
+                }
+			).then(
+			   function(response){ callback(response); }, 
+			   function(response){ callback(response); }
+			);			
+        }
+
 		service.batch_count = function(
             search,
 			callback		
@@ -633,6 +787,21 @@ app.controller('generator_controller',[
 		){
 			$http.post(
                 'conveyor/api/v1/generator/read/unscanned/count',
+                { 
+                    search : search 
+                }
+			).then(
+			   function(response){ callback(response); }, 
+			   function(response){ callback(response); }
+			);			
+        }
+
+        service.errors_count = function(
+            search,
+			callback		
+		){
+			$http.post(
+                'conveyor/api/v1/generator/read/errors/count',
                 { 
                     search : search 
                 }
@@ -686,6 +855,21 @@ app.controller('generator_controller',[
                 'conveyor/api/v1/generator/delete',
                 { 
                     batch_id : batch_id 
+                }
+			).then(
+			   function(response){ callback(response); }, 
+			   function(response){ callback(response); }
+			);			
+        }
+
+        service.errors_deleted = function(
+            errors_id,
+            callback		
+		){
+			$http.post(
+                'conveyor/api/v1/generator/errors/delete',
+                { 
+                    errors_id : errors_id 
                 }
 			).then(
 			   function(response){ callback(response); }, 

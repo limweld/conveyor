@@ -55,7 +55,7 @@
      
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <?php echo $_SESSION["fullname"] ?><i class="fas fa-user-circle fa-fw"></i>
+          <?php echo $_SESSION["fullname"]." "; ?><i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
@@ -97,19 +97,22 @@
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" id="unscanned" data-toggle="tab" href="#outbox" role="tab" aria-controls="outbox" aria-selected="true" ng-click="unscanned.list_tab()">Unscanned</a>
+            <a class="nav-link active" id="unscanned" data-toggle="tab" href="#unscanned_tab" role="tab" aria-selected="true" ng-click="unscanned.list_tab()">Unscanned</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="scanned-tab" data-toggle="tab" href="#outboxlog" role="tab" aria-controls="outboxlog" aria-selected="false" ng-click="scanned.list_tab()">Scanned</a>
+            <a class="nav-link" id="scanned-tab" data-toggle="tab" href="#scanned_tab" role="tab" aria-selected="false" ng-click="scanned.list_tab()">Scanned</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="batch-tab" data-toggle="tab" href="#inbox" role="tab" aria-controls="inbox" aria-selected="false" ng-click="batch.list_tab()">Batch</a>
+            <a class="nav-link" id="errors-tab" data-toggle="tab" href="#errors_tab" role="tab" aria-selected="false" ng-click="errors.list_tab()">Errors</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="batch-tab" data-toggle="tab" href="#batch_tab" role="tab" aria-selected="false" ng-click="batch.list_tab()">Batch</a>
           </li>
         </ul>
         <div class="tab-content">
           
           <!-- Unscanned Tab Start -->
-          <div class="tab-pane fade show active" id="outbox" role="tabpanel" aria-labelledby="unscanned">
+          <div class="tab-pane fade show active" id="unscanned_tab" role="tabpanel" aria-labelledby="unscanned">
             <br>
             <div class="card">
               <div class="card-body">
@@ -207,7 +210,7 @@
           <!-- Unscanned Tab End -->
           
           <!-- Scanned Tab Start -->
-          <div class="tab-pane fade" id="outboxlog" role="tabpanel" aria-labelledby="scanned-tab">
+          <div class="tab-pane fade" id="scanned_tab" role="tabpanel" aria-labelledby="scanned-tab">
             <br>
             <div class="card">
               <div class="card-body">
@@ -305,7 +308,7 @@
           <!-- Scanned Tab End -->
 
           <!-- Batch Tab Start -->
-          <div class="tab-pane fade" id="inbox" role="tabpanel" aria-labelledby="batch-tab">
+          <div class="tab-pane fade" id="batch_tab" role="tabpanel" aria-labelledby="batch-tab">
             <br>
             <div class="card">
               <div class="card-body">
@@ -347,7 +350,7 @@
                           <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
                         </div>
 
-                        <table class="table table-bordered dataTable table-hover table-sm" width="100%" cellspacing="0" role="grid" style="width: 100%;">
+                        <table class="table table-bordered table-hover table-sm" width="100%" cellspacing="0" role="grid" style="width: 100%;">
                           <thead>
                             <tr>
                               <th>Batch Id</th>
@@ -411,6 +414,106 @@
           </div>
           <!-- Batch Tab End -->
 
+          <!-- Errors Tab Start -->
+          <div class="tab-pane fade" id="errors_tab" role="tabpanel" aria-labelledby="errors-tab">
+          <br>
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <div class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="dataTable_length">
+                          <label>
+                            <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" ng-options="item.value for item in ranges track by item.id"  ng-model="errors.selected" ng-change="errors.selected_change()">
+                            </select> Rows
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_paginate paging_simple_numbers" >
+                          <ul class="pagination pagination-sm">
+                            <li class="paginate_button page-item previous " id="dataTable_previous">
+                              <a href="#" class=" btn btn-primary btn-sm" ng-click="errors.list_search()"> <i class="fas fa-fw fa-search"></i></a>
+                            </li>
+                          
+                            <li class="paginate_button page-item active">
+                                <input type="search" class="form-control form-control-sm" placeholder="" ng-model="errors.search">
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+
+                      <div class="col-sm-12">
+
+                        <div class="progress" ng-show="errors.loading">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                        </div>
+
+                        <table class="table table-bordered table-hover table-sm" width="100%" cellspacing="0" role="grid" style="width: 100%;">
+                          <thead>
+                            <tr>
+                              <th>Entry Id</th>
+                              <th>Barcode Code</th>
+                              <th>Created Date</th>
+                              <th class="text-center"><i class="fas fa-fw fa-info-circle"></i></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="x in errors.list">
+                              <td><a href="" ng-click="errors.show_barcodes( x.errors_id )">{{ x.id }}</a></td>
+                              <td>{{ x.barcode }}</td>
+                              <td>{{ x.created_at }}</td>
+                              <td class="text-center" ng-click="errors.obj.modify_entry_click( x )"><a href=""><i class="fas fa-fw fa-edit"></i></a></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
+                          Showing {{ errors.showfrom }} to {{ errors.showto }} of {{ errors.totalrows }} entries
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers" >
+                          <ul class="pagination pagination-sm">
+                            <li class="page-item" ng-show="errors.pagination.state.first" ng-click="errors.pagination.first_click()">
+                                <a href="" class="page-link"><i class="fas fa-fw fa-angle-double-left"></i></a>
+                            </li>
+                            <li class="page-item" ng-show="errors.pagination.state.previous" ng-click="errors.pagination.previous_click()">
+                                <a href="" class="page-link"><i class="fas fa-fw fa-angle-left"></i></a>
+                            </li>
+                            <li class="page-item" ng-show="errors.pagination.state.previousPages" ng-click="errors.pagination.previouspages_click()">
+                                <a href="" class="page-link">..</a>
+                            </li>
+                            <li class="page-item {{ x.active }}" ng-repeat="x in errors.pagination.state.pages" ng-click="errors.pagination.pages_click(x)">
+                                <a href="" class="page-link">{{ x.page }}</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="" class="page-link" ng-show="errors.pagination.state.nextPages" ng-click="errors.pagination.nextpages_click()">..</a>
+                            </li>
+                            <li class="page-item next" ng-show="errors.pagination.state.next" ng-click="errors.pagination.next_click()">
+                                <a href="" class="page-link"><i class="fas fa-fw fa-angle-right"></i></a>
+                            </li>
+                            <li class="page-item" ng-show="errors.pagination.state.last" ng-click="errors.pagination.last_click()">
+                                <a href="" class="page-link"><i class="fas fa-fw fa-angle-double-right"></i></a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+          </div>
+          <!-- Errors Tab End -->
+
         </div>
       </div>
       <!-- /.container-fluid -->
@@ -450,86 +553,142 @@
     </div>
   </div>
 
-    <!-- Modal -->
+    <!--Add Batch Modal -->
     <div class="modal fade" id="addBatchModal" role="dialog" >
-    <div class="modal-dialog">
+      <div class="modal-dialog">
     
       <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{ batch.obj.create_title_show }} Barcode Batch</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-        
-        <form>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ batch.obj.create_title_show }} Barcode Batch</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
 
-          <div class="form-group row" ng-show="batch.obj.loading_visibility">
-            <div class="col-sm-12">
-              <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group row" ng-show="batch.obj.loading_visibility">
+                <div class="col-sm-12">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                  </div>
+                </div>
               </div>
-            </div>
+
+              <div class="form-group row" ng-show="batch.obj.created_at_visibility">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Created at</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="batch.obj.created_at" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row" ng-show="batch.obj.update_at_visibility">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Updated at</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="batch.obj.updated_at" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row" ng-show="batch.obj.batch_id_visibility">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Batch Id</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="batch.obj.batch_id" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row" ng-show="batch.obj.sortercode_visibility">
+                <label for="inputDescription" class="col-sm-3 col-form-label col-form-label-sm">Sorted Code</label>
+                <div class="col-sm-9">
+                    <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" ng-options="item.value for item in sortercode track by item.id" ng-model="batch.obj.sortercode" ng-disabled="batch.obj.sortercode_disabled">
+                    </select>
+                </div>
+              </div>
+
+              <div class="form-group row" ng-show="batch.obj.max_range_visibility">
+                <label for="inputDescription" class="col-sm-3 col-form-label col-form-label-sm">Range</label>
+                <div class="col-sm-9">
+                    <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" ng-options="item.value for item in ranges track by item.id" ng-model="batch.obj.max_range" ng-disabled="batch.obj.max_range_disabled">
+                    </select>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDescription" class="col-sm-3 col-form-label col-form-label-sm">Description</label>
+                <div class="col-sm-9">
+                  <textarea type="textarea" class="form-control form-control-sm" id="inputDescription" placeholder="Descrption" rows="2" ng-model="batch.obj.description"></textarea>
+                </div>
+              </div>
+            </form>
           </div>
 
-          <div class="form-group row" ng-show="batch.obj.created_at_visibility">
-            <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Created at</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="batch.obj.created_at" readonly>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-primary" ng-disabled="batch.obj.delete_disabled" ng-show="batch.obj.delete_show" ng-click="batch.obj.delete_click()"><i class="fas fa-fw fa-trash"></i> Delete</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-disabled="batch.obj.update_disabled" ng-show="batch.obj.update_show" ng-click="batch.obj.update_click()"><i class="fas fa-fw fa-edit"></i> Update</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-disabled="batch.obj.create_disabled" ng-show="batch.obj.create_show" ng-click="batch.obj.created_click()"><i class="fas fa-fw fa-plus-circle"></i> Add</button>
           </div>
-
-          <div class="form-group row" ng-show="batch.obj.update_at_visibility">
-            <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Updated at</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="batch.obj.updated_at" readonly>
-            </div>
-          </div>
-
-          <div class="form-group row" ng-show="batch.obj.batch_id_visibility">
-            <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Batch Id</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="batch.obj.batch_id" readonly>
-            </div>
-          </div>
-
-          <div class="form-group row" ng-show="batch.obj.sortercode_visibility">
-            <label for="inputDescription" class="col-sm-3 col-form-label col-form-label-sm">Sorted Code</label>
-            <div class="col-sm-9">
-                <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" ng-options="item.value for item in sortercode track by item.id" ng-model="batch.obj.sortercode" ng-disabled="batch.obj.sortercode_disabled">
-                </select>
-            </div>
-          </div>
-
-          <div class="form-group row" ng-show="batch.obj.max_range_visibility">
-            <label for="inputDescription" class="col-sm-3 col-form-label col-form-label-sm">Range</label>
-            <div class="col-sm-9">
-                <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" ng-options="item.value for item in ranges track by item.id" ng-model="batch.obj.max_range" ng-disabled="batch.obj.max_range_disabled">
-                </select>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label for="inputDescription" class="col-sm-3 col-form-label col-form-label-sm">Description</label>
-            <div class="col-sm-9">
-              <textarea type="textarea" class="form-control form-control-sm" id="inputDescription" placeholder="Descrption" rows="2" ng-model="batch.obj.description"></textarea>
-            </div>
-          </div>
-          
-        </form>
-
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-primary" ng-disabled="batch.obj.delete_disabled" ng-show="batch.obj.delete_show" ng-click="batch.obj.delete_click()"><i class="fas fa-fw fa-trash"></i> Delete</button>
-          <button type="button" class="btn btn-sm btn-primary" ng-disabled="batch.obj.update_disabled" ng-show="batch.obj.update_show" ng-click="batch.obj.update_click()"><i class="fas fa-fw fa-edit"></i> Update</button>
-          <button type="button" class="btn btn-sm btn-primary" ng-disabled="batch.obj.create_disabled" ng-show="batch.obj.create_show" ng-click="batch.obj.created_click()"><i class="fas fa-fw fa-plus-circle"></i> Add</button>
-        </div>
-      </div>
       
+      </div>
     </div>
-  </div>
+    <!--Add End Modal -->
+
+
+   <!--Add Errors Modal -->
+   <div class="modal fade" id="addErrorsModal" role="dialog" >
+      <div class="modal-dialog">
+    
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ errors.obj.create_title_show }} Barcode Errors</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form>
+              <div class="form-group row" ng-show="errors.obj.loading_visibility">
+                <div class="col-sm-12">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Created at</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="errors.obj.created_at" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Entry Id</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="errors.obj.id" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Barcode</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="errors.obj.barcode" readonly>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-primary" ng-disabled="errors.obj.delete_disabled" ng-show="errors.obj.delete_show" ng-click="errors.obj.delete_click()"><i class="fas fa-fw fa-trash"></i> Delete</button>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    <!--Add Errors Modal -->
+
 
 
 </div>

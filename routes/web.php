@@ -67,14 +67,17 @@ $router->group(['prefix' => 'conveyor'], function() use ($router) {
             $router->post('read/batch','conveyor\GeneratorController@read_batch');
             $router->post('read/scanned','conveyor\GeneratorController@read_scanned');
             $router->post('read/unscanned','conveyor\GeneratorController@read_unscanned');
+            $router->post('read/errors','conveyor\GeneratorController@read_errors');
             
             $router->post('read/batch/count','conveyor\GeneratorController@read_batch_count');
             $router->post('read/scanned/count','conveyor\GeneratorController@read_scanned_count');
             $router->post('read/unscanned/count','conveyor\GeneratorController@read_unscanned_count');
+            $router->post('read/errors/count','conveyor\GeneratorController@read_errors_count');
             
             $router->post('update','conveyor\GeneratorController@update');
             
             $router->post('delete','conveyor\GeneratorController@delete');
+            $router->post('errors/delete','conveyor\GeneratorController@errors_delete');
         });
 
         $router->group(['prefix' => 'auth'], function() use ($router) {

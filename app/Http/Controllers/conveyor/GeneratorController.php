@@ -151,6 +151,26 @@ class GeneratorController extends Controller
         return response()->json($unscanned_list);					
     }
 
+    public function read_errors(Request $request)
+    {
+
+        $from = ($request->page - 1) * $request->range;
+        $limit = $request->range;
+
+        $errors_list = DB::select(
+            'select id, barcode, created_at FROM conveyor.error_barcode where deleted_at is null and barcode like ? 
+            order by id desc 
+            limit ?,?',
+            [
+                '%'.$request->search.'%',
+                $from,
+                $limit
+            ]
+        );
+
+        return response()->json($errors_list);					
+    }
+
     public function read_batch_count(Request $request)
     {
         $batch_count = DB::select(
@@ -179,6 +199,18 @@ class GeneratorController extends Controller
     {
         $unscanned_count = DB::select(
             'select count(*) as totalrows from barcode where status = "Unscanned" and deleted_at is null and barcode_id like ?',
+            [
+                '%'.$request->search.'%'
+            ]
+        );
+
+        return response()->json($unscanned_count[0]);					
+    }
+
+    public function read_errors_count(Request $request)
+    {
+        $unscanned_count = DB::select(
+            'select count(*) as totalrows from error_barcode where deleted_at is null and barcode like ?',
             [
                 '%'.$request->search.'%'
             ]
@@ -216,6 +248,22 @@ class GeneratorController extends Controller
             );
 
             return response()->json($barcode);    
+        }
+
+        return response()->json(0);					
+    
+    }
+
+    public function errors_delete(Request $request)
+    {
+        $error = DB::update('update error_barcode set  deleted_at = NOW() where id = ?', 
+            [
+                $request->errors_id
+            ]
+        );
+
+        if($error){
+            return response()->json($error);    
         }
 
         return response()->json(0);					
