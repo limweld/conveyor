@@ -81,6 +81,13 @@
           <i class="fas fa-fw fa-barcode"></i>
           <span>Generator</span></a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="credential">
+          <i class="fas fa-fw fa-key"></i>
+          <span>Credential</span></a>
+      </li>
+
     </ul>
 
     <div id="content-wrapper">
