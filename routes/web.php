@@ -28,7 +28,7 @@ $router->get('main',function() use ($router) {
 });
 
 $router->get('generator',function() use ($router) {
-//    return view('conveyor/generator');
+    return view('conveyor/generator');
 });
 
 $router->get('credential',function() use ($router) {

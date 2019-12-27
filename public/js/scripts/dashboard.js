@@ -19,15 +19,28 @@ app.controller('dashboard_controller',[
         $scope.error_sort = {};
         $scope.logs_stream = {};
 
+        $scope.q_0 = [];
+        $scope.q_1 = [];
+        $scope.q_2 = [];
+        $scope.e_0 = [];
+
+        $scope.connection = [];
+
+        let options = {
+            clientId: "test",
+            protocolId: 'MQTT',
+            protocolVersion: 4,
+            username: "",
+            password: ""
+        };
+
         let quota_list = function( ){
             dashboard_model.quota_list(
                 function(response){
-                   // $scope.quota_sort.list = [];
+
                     if(response.status == 200){
                         $scope.quota_sort.list = response.data.quota;
                     
-                        //console.log($scope.quota_sort.list);
-
                         $scope.quota_sort.q0 = ($scope.quota_sort.list[0] == null) ? 0 : $scope.quota_sort.list[0].total;
                         $scope.quota_sort.q1 = ($scope.quota_sort.list[1] == null) ? 0 : $scope.quota_sort.list[1].total;
                         $scope.quota_sort.q2 = ($scope.quota_sort.list[2] == null) ? 0 : $scope.quota_sort.list[2].total;
@@ -42,6 +55,46 @@ app.controller('dashboard_controller',[
             );
         }
 
+        let connection_list = function( search, page, range ){
+            dashboard_model.connection_list(
+                page,
+                range,
+                search,
+                function(response){ 
+                    if(response.status == 200){
+                        $scope.connection = response.data; 
+
+                        options.username = $scope.connection[4].username;
+                        options.password = $scope.connection[4].password;
+                        
+                        ngmqtt.connect('ws://' + $scope.connection[4].ip_address +':'+ $scope.connection[4].port , options);				
+                        
+                        ngmqtt.listenConnection(
+                            "dashboard_controller", 
+                            function(){
+                                console.log("connected");
+                                ngmqtt.subscribe('code_messages');
+                                ngmqtt.subscribe($scope.connection[0].topic);
+                                ngmqtt.subscribe($scope.connection[1].topic);
+                                ngmqtt.subscribe($scope.connection[2].topic);
+                                ngmqtt.subscribe($scope.connection[3].topic);
+                            }
+                        );
+                
+                        ngmqtt.listenMessage("dashboard_controller", function(topic, message){
+                            let mess = JSON.parse(message);
+
+                            if(topic == "quota_0"){ $scope.q_0 = dashboard_model.que_cut( $scope.q_0, { "topic": topic, "value" : mess } , 10 ); }
+                            if(topic == "quota_1"){ $scope.q_1 = dashboard_model.que_cut( $scope.q_1, { "topic": topic, "value" : mess } , 10 ); }
+                            if(topic == "quota_2"){ $scope.q_2 = dashboard_model.que_cut( $scope.q_2, { "topic": topic, "value" : mess } , 10 ); }
+                            if(topic == "quota_error"){ $scope.e_0 = dashboard_model.que_cut( $scope.e_0, { "topic": topic, "value" : mess } , 10 ); }
+
+                        });
+                
+                    }
+                }
+            );
+        }
 
         let logout = function( ){
             dashboard_model.logout(
@@ -59,12 +112,9 @@ app.controller('dashboard_controller',[
             logout();
         }
 
-        $scope.data_reload = function () {
+        $interval(function() {
             quota_list();
-            $timeout(function(){
-                    $scope.data_reload();
-            },10000)
-        };
+        }, 300);
 
         $scope.quota_sort.q0 = 0;
         $scope.quota_sort.q1 = 0;
@@ -74,15 +124,43 @@ app.controller('dashboard_controller',[
 
         $scope.quota_sort.e0 = 0;
 
-        $scope.data_reload();
-
-        
+        connection_list('qu',1,5);
     }
 ]).factory('dashboard_model',[
     '$http',
     function($http){
         
         var service = {};
+
+        service.que_cut = function( list, value, range ){
+            
+            list.push( value );
+
+            if( list.length == range ){
+                list.shift()
+            }
+            
+            return list;
+        }
+
+        service.connection_list = function(
+            page,
+            range,
+            search,
+			callback		
+		){
+			$http.post(
+                'conveyor/api/v1/credential/read/connection',
+                { 
+                    page : page,
+                    range : range,
+                    search : search 
+                }
+			).then(
+			   function(response){ callback(response); }, 
+			   function(response){ callback(response); }
+			);			
+        }
 
         service.quota_list = function(
 			callback		

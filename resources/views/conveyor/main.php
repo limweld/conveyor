@@ -168,17 +168,7 @@
                 <h6>Luz-Sorter Logs</h6>
               </div>
               <div class="card-body bg-dark" style="height : 250px; color: #45A945;">
-
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
+                <small class="card-text" ng-repeat="x in q_0">$ BC<i class="fas fa-arrow-right"></i>{{ x.value }}</br></small>
               </div>
             </div>
           </div>
@@ -191,17 +181,7 @@
                   <h6>Viz-Sorter Logs</h6>
                 </div>
                 <div class="card-body bg-dark" style="height : 250px; color: #45A945;">
-
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
+                  <small class="card-text" ng-repeat="x in q_1">$ BC<i class="fas fa-arrow-right"></i>{{ x.value }}</br></small>
                 </div>
               </div>
             </div>
@@ -213,17 +193,7 @@
                     <h6>Min-Sorter Logs</h6>
                   </div>
                   <div class="card-body bg-dark" style="height : 250px; color: #45A945;">
-
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                  <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
+                    <small class="card-text" ng-repeat="x in q_2">$ BC<i class="fas fa-arrow-right"></i>{{ x.value }}</br></small>
                   </div>
                 </div>
               </div>
@@ -236,44 +206,12 @@
                       <h6>Error Logs</h6>
                     </div>
                     <div class="card-body bg-dark" style="height : 250px; color: #45A945;">
-
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>8718866M7I8C01</small></br>
-                    <small class="card-text">$ BC<i class="fas fa-arrow-right"></i>7I0G512416826C</small></br>
-
+                      <small class="card-text" ng-repeat="x in e_0">$ BC<i class="fas fa-arrow-right"></i>{{ x.value }}</br></small>
                     </div>
                   </div>
                 </div>
-      
 
-
-
-
-          
-
-
-
-
-        </div>
-
-        <!-- Area Chart Example-->
-        <!-- <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-chart-area"></i>
-            Area Chart Example</div>
-          <div class="card-body">
-            <canvas id="myAreaChart" width="100%" height="30"></canvas>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div> -->
-
-     
+        </div>    
 
       </div>
       <!-- /.container-fluid -->
