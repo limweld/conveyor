@@ -28,7 +28,7 @@ $router->get('main',function() use ($router) {
 });
 
 $router->get('generator',function() use ($router) {
-    return view('conveyor/generator');
+//    return view('conveyor/generator');
 });
 
 $router->get('credential',function() use ($router) {
@@ -87,11 +87,11 @@ $router->group(['prefix' => 'conveyor'], function() use ($router) {
             $router->post('update/user','UserController@update_user');
             $router->post('delete/user','UserController@delete_user');
 
-            $router->post('create/connection','UserController@create_user');
+            $router->post('create/connection','conveyor\CredentialController@create_connection');
             $router->post('read/connection','conveyor\CredentialController@read_connection');
             $router->post('read/connection/count','conveyor\CredentialController@read_connection_count');
-            $router->post('update/connection','UserController@update_user');
-            $router->post('delete/connection','UserController@delete_user');
+            $router->post('update/connection','conveyor\CredentialController@update_connection');
+            $router->post('delete/connection','conveyor\CredentialController@delete_connection');
             
         });
 

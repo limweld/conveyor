@@ -265,16 +265,16 @@
                         <table class="table table-bordered table-hover table-sm" width="100%" cellspacing="0" role="grid" style="width: 100%;">
                           <thead>
                             <tr>
-                              <th>Entry Id</th>
-                              <th>Barcode Code</th>
+                              <th>Topic</th>
+                              <th>Description</th>
                               <th>Created Date</th>
                               <th class="text-center"><i class="fas fa-fw fa-info-circle"></i></th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr ng-repeat="x in connection.list">
-                              <td><a href="" ng-click="connection.show_barcodes( x.connection_id )">{{ x.id }}</a></td>
-                              <td>{{ x.barcode }}</td>
+                              <td>{{ x.topic }}</td>
+                              <td>{{ x.description }}</td>
                               <td>{{ x.created_at }}</td>
                               <td class="text-center" ng-click="connection.obj.modify_entry_click( x )"><a href=""><i class="fas fa-fw fa-edit"></i></a></td>
                             </tr>
@@ -480,27 +480,83 @@
                 </div>
               </div>
 
-             <!-- 
-              <div class="form-group row">
-                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Created at</label>
-                <div class="col-sm-9">
-                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="connection.obj.created_at" readonly>
-                </div>
-              </div>
-
-              <div class="form-group row">
+              <div class="form-group row" ng-show="connection.obj.id_visibility">
                 <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Entry Id</label>
                 <div class="col-sm-9">
-                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="connection.obj.id" readonly>
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_id" ng-model="connection.obj.id" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row" ng-show="connection.obj.created_at_visibility">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Created at</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_created_at" ng-model="connection.obj.created_at" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row" ng-show="connection.obj.update_at_visibility">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Updated at</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_updated_at" ng-model="connection.obj.updated_at" readonly>
                 </div>
               </div>
 
               <div class="form-group row">
-                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Barcode</label>
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Topic</label>
                 <div class="col-sm-9">
-                  <input type="input" class="form-control form-control-sm" id="inputPassword" ng-model="connection.obj.barcode" readonly>
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_topic" ng-model="connection.obj.topic" >
                 </div>
-              </div> -->
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Ip Address</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_ip_address" ng-model="connection.obj.ip_address" >
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Port</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_port" ng-model="connection.obj.port" >
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Username</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_username" ng-model="connection.obj.username" >
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Password</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control form-control-sm" id="connection_obj_password" ng-model="connection.obj.password" placeholder="{{ connection.obj.password_placeholder }}">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Protocol Type</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_protocol_type" ng-model="connection.obj.protocol_type" >
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputDate" class="col-sm-3 col-form-label col-form-label-sm">Description</label>
+                <div class="col-sm-9">
+                  <input type="input" class="form-control form-control-sm" id="connection_obj_description" ng-model="connection.obj.description" >
+                </div>
+              </div>
+
+              <div class="form-group row" ng-show="connection.obj.error_visibility">
+                <div class="col-sm-12" style="text-align: center">
+                  <label for="inputDate" class="alert alert-danger col-sm-12 col-form-label col-form-label-sm">{{ connection.obj.error }}</label>
+                </div>
+              </div>
+
+
             </form>
           </div>
 

@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        //AuthenticationController::check_session_backend();
+        AuthenticationController::check_session_backend();
     }
 
     public function create_user(Request $request)

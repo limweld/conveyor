@@ -10,8 +10,8 @@ app.controller('generator_controller',[
     ){
         
         $scope.ranges = [
-            { id : -1, value : 2 },
-            { id : 0, value : 3 },
+        //    { id : -1, value : 2 },
+        //    { id : 0, value : 3 },
             { id : 1, value : 10 },
             { id : 2, value : 20 },
             { id : 3, value : 50 },
@@ -192,6 +192,121 @@ app.controller('generator_controller',[
             );
         }
 
+        let connection_created = function( 
+            ip_address,
+            port,
+            topic,
+            username,
+            password,
+            protocol_type,
+            description
+        ){
+            $scope.connection.loading = true;
+            $scope.connection.obj.error_visibility = false;
+            credential_model.connection_created(
+                ip_address,
+                port,
+                topic,
+                username,
+                password,
+                protocol_type,
+                description,
+                function(response){ 
+                    if(response.status == 200){
+                        
+                        $scope.connection.obj.loading_visibility = false;
+                            
+                        if(response.data.validity){
+                            $("#addConnectionModal").modal('toggle'); 
+                            $scope.connection.obj.error_visibility = false;
+                            connection_count( $scope.connection.search_temp);
+                        }
+
+                        if(!response.data.validity){
+                            $scope.connection.obj.error = response.data.message;
+                            $scope.connection.loading = false;
+                            $scope.connection.obj.loading = false;
+                            $scope.connection.obj.create_disabled = false;
+                            $scope.connection.obj.error_visibility = true;
+                        }
+                        
+                    }
+                }
+            );
+        }
+
+        let connection_updated = function( 
+            id,
+            ip_address,
+            port,
+            topic,
+            username,
+            password,
+            protocol_type,
+            description
+         ){
+            $scope.connection.loading = true;
+            credential_model.connection_updated(
+                id,
+                ip_address,
+                port,
+                topic,
+                username,
+                password,
+                protocol_type,
+                description,
+                function(response){ console.log(response.data);
+                    if(response.status == 200){
+                        $scope.connection.obj.loading_visibility = false;
+                            
+                        if(response.data.validity){
+                            $("#addConnectionModal").modal('toggle'); 
+                            $scope.connection.obj.error_visibility = false;
+                            connection_count( $scope.connection.search_temp);
+                        }
+
+                        if(!response.data.validity){
+                            $scope.connection.obj.error = response.data.message;
+                            $scope.connection.loading = false;
+                            $scope.connection.obj.loading = false;
+                            $scope.connection.obj.create_disabled = false;
+                            $scope.connection.obj.error_visibility = true;
+                            $scope.connection.obj.update_disabled = false;
+                            $scope.connection.obj.delete_disabled = false;
+                        }
+                    }
+                }
+            );
+        }
+
+        let connection_deleted = function( id ){
+            $scope.connection.loading = true;
+            credential_model.connection_deleted(
+                id,
+                function(response){ 
+                    if(response.status == 200){
+                        $scope.connection.obj.loading_visibility = false;
+
+                        if(response.data.validity){
+                            $("#addConnectionModal").modal('toggle'); 
+                            $scope.connection.obj.error_visibility = false;
+                            connection_count( $scope.connection.search_temp);
+                        }
+
+                        if(!response.data.validity){
+                            $scope.connection.obj.error = response.data.message;
+                            $scope.connection.loading = false;
+                            $scope.connection.obj.loading = false;
+                            $scope.connection.obj.create_disabled = false;
+                            $scope.connection.obj.error_visibility = true;
+                            $scope.connection.obj.update_disabled = false;
+                            $scope.connection.obj.delete_disabled = false;
+                        }
+                    }
+                }
+            );
+        }
+
         let logout = function( ){
             credential_model.logout(
                 function(response){ 
@@ -358,7 +473,6 @@ app.controller('generator_controller',[
             $scope.user.obj.firstname = "";
             $scope.user.obj.lastname = "";
             
-            console.log('$scope.user.obj.create_entry_click');
         }
 
         $scope.connection.obj.create_entry_click = function(){
@@ -370,8 +484,20 @@ app.controller('generator_controller',[
 
             $scope.connection.obj.create_disabled = false;
             $scope.connection.obj.loading_visibility = false;
-            
-            console.log("$scope.connection.obj.create_entry_click");
+
+            $scope.connection.obj.id_visibility = false;
+            $scope.connection.obj.created_at_visibility = false;
+            $scope.connection.obj.update_at_visibility = false;
+            $scope.connection.obj.error_visibility = false;
+
+            $scope.connection.obj.ip_address =
+            $scope.connection.obj.port = 
+            $scope.connection.obj.topic = 
+            $scope.connection.obj.username = 
+            $scope.connection.obj.password = 
+            $scope.connection.obj.protocol_type = 
+            $scope.connection.obj.description = null;
+
         }
 
         $scope.user.obj.modify_entry_click = function( obj ){
@@ -410,18 +536,29 @@ app.controller('generator_controller',[
             $scope.connection.obj.update_disabled = false;
             $scope.connection.obj.delete_disabled = false;
             $scope.connection.obj.loading_visibility = false;
+
+            $scope.connection.obj.id_visibility = true;
+            $scope.connection.obj.created_at_visibility = true;
+            $scope.connection.obj.update_at_visibility = true;
+            $scope.connection.obj.error_visibility = false;
+
+            $scope.connection.obj.id = obj.id;
+            $scope.connection.obj.created_at = obj.created_at;  
+            $scope.connection.obj.updated_at = obj.updated_at;
+            $scope.connection.obj.ip_address = obj.ip_address;
+            $scope.connection.obj.port = obj.port;
+            $scope.connection.obj.topic = obj.topic;
+            $scope.connection.obj.username = obj.username;
+            $scope.connection.obj.password = obj.password;
+            $scope.connection.obj.protocol_type = obj.protocol_type;
+            $scope.connection.obj.description = obj.description;
                      
-            console.log("$scope.connection.obj.modify_entry_click");
         }
 
         $scope.user.obj.created_click = function(){
 
             $scope.user.obj.create_disabled = true;
             $scope.user.obj.loading_visibility = true;
-
-            console.log("$scope.user.obj.created_click");
-            $scope.user.obj.error_visibility = true;
-            $scope.user.obj.error = false;
 
             user_created( 
                 $scope.user.obj.username, 
@@ -436,9 +573,6 @@ app.controller('generator_controller',[
             $scope.user.obj.update_disabled = true;
             $scope.user.obj.delete_disabled = true;
             $scope.user.obj.loading_visibility = true;
-
-            $scope.user.obj.error_visibility = true;
-            $scope.user.obj.error = false;
 
             user_updated( 
                 $scope.user.obj.id,
@@ -466,6 +600,16 @@ app.controller('generator_controller',[
             $scope.connection.obj.create_disabled = true;
             $scope.connection.obj.loading_visibility = true;
 
+            connection_created(
+                $scope.connection.obj.ip_address,
+                $scope.connection.obj.port,
+                $scope.connection.obj.topic,
+                $scope.connection.obj.username,
+                $scope.connection.obj.password,
+                $scope.connection.obj.protocol_type,
+                $scope.connection.obj.description
+            );
+
             console.log("$scope.connection.obj.created_click");
         }
 
@@ -474,6 +618,17 @@ app.controller('generator_controller',[
             $scope.connection.obj.update_disabled = true;
             $scope.connection.obj.delete_disabled = true;
             $scope.connection.obj.loading_visibility = true;
+
+            connection_updated(
+                $scope.connection.obj.id,
+                $scope.connection.obj.ip_address,
+                $scope.connection.obj.port,
+                $scope.connection.obj.topic,
+                $scope.connection.obj.username,
+                $scope.connection.obj.password,
+                $scope.connection.obj.protocol_type,
+                $scope.connection.obj.description
+            );
 
             console.log("$scope.connection.obj.update_click");
         }
@@ -484,7 +639,9 @@ app.controller('generator_controller',[
             $scope.connection.obj.delete_disabled = true;
             $scope.connection.obj.loading_visibility = true;
 
-            console.log("$scope.connection.obj.delete_click");
+            connection_deleted(
+                $scope.connection.obj.id
+            );
         }
 
         $scope.user.selected = $scope.ranges[0];
@@ -494,8 +651,6 @@ app.controller('generator_controller',[
         $scope.connection.page = 1;
 
         user_count( $scope.user.search_temp);
-        connection_count( $scope.connection.search_temp);
-
 
     }
 ]).factory('credential_model',[
@@ -669,14 +824,26 @@ app.controller('generator_controller',[
 			);			
         }
 
-        service.connection_create = function(
-            search,
+        service.connection_created = function(
+            ip_address,
+            port,
+            topic,
+            username,
+            password,
+            protocol_type,
+            description,
 			callback		
 		){
 			$http.post(
-                'conveyor/api/v1/credential/read/connection/count',
+                'conveyor/api/v1/credential/create/connection',
                 { 
-                    search : search 
+                    ip_address : ip_address, 
+                    port : port, 
+                    topic : topic,
+                    username : username,
+                    password : password,
+                    protocol_type : protocol_type,
+                    description : description
                 }
 			).then(
 			   function(response){ callback(response); }, 
@@ -684,14 +851,28 @@ app.controller('generator_controller',[
 			);			
         }
 
-        service.connection_update = function(
-            search,
+        service.connection_updated = function(
+            id,
+            ip_address,
+            port,
+            topic,
+            username,
+            password,
+            protocol_type,
+            description,
 			callback		
 		){
 			$http.post(
-                'conveyor/api/v1/credential/read/connection/count',
+                'conveyor/api/v1/credential/update/connection',
                 { 
-                    search : search 
+                    id : id,
+                    ip_address : ip_address, 
+                    port : port, 
+                    topic : topic,
+                    username : username,
+                    password : password,
+                    protocol_type : protocol_type,
+                    description : description
                 }
 			).then(
 			   function(response){ callback(response); }, 
@@ -699,14 +880,14 @@ app.controller('generator_controller',[
 			);			
         }
 
-        service.connection_delete = function(
-            search,
+        service.connection_deleted = function(
+            id,
 			callback		
 		){
 			$http.post(
-                'conveyor/api/v1/credential/read/connection/count',
+                'conveyor/api/v1/credential/delete/connection',
                 { 
-                    search : search 
+                    id : id 
                 }
 			).then(
 			   function(response){ callback(response); }, 
