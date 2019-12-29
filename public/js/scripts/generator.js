@@ -16,7 +16,6 @@ app.controller('generator_controller',[
         ];
 
         $scope.ranges = [
-    //        { id : 0, value : 3 },
             { id : 1, value : 10 },
             { id : 2, value : 20 },
             { id : 3, value : 50 },
@@ -220,7 +219,7 @@ app.controller('generator_controller',[
         let errors_deleted = function( errors_id ){
             generator_model.errors_deleted(
                 errors_id,
-                function(response){ console.log(response.data);
+                function(response){
                     if(response.status == 200){
                         if(response.data != 0){
                             errors_count( $scope.errors.search_temp);

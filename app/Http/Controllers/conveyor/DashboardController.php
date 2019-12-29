@@ -66,6 +66,29 @@ class DashboardController extends Controller
 
     }
 
+
+    public function read_quota_hourly(){
+        // select 
+        //     b.sortercode,
+        //     count(c.updated_at) as total,
+        //     year(c.updated_at) as year,
+        //     monthname(c.created_at) as month,
+        //     day(c.updated_at) as day,
+        //     hour(c.updated_at) as hour
+
+        // from conveyor.barcode as c 
+        // left join conveyor.batch_barcode as b on b.batch_id = c.batch_id
+        // left join conveyor.sort_code as s on s.code = b.sortercode
+
+        // where 
+        // c.status = 'Scanned' 
+        // and c.deleted_at is null
+        // and c.updated_at > CURDATE()
+
+        // group by hour(c.updated_at), b.sortercode
+        // order by c.updated_at, b.sortercode
+    }
+
     public function read_error(Request $request)
     {
         

@@ -82,12 +82,15 @@ app.controller('dashboard_controller',[
                         );
                 
                         ngmqtt.listenMessage("dashboard_controller", function(topic, message){
-                            let mess = JSON.parse(message);
 
-                            if(topic == "quota_0"){ $scope.q_0 = dashboard_model.que_cut( $scope.q_0, { "topic": topic, "value" : mess } , 10 ); }
-                            if(topic == "quota_1"){ $scope.q_1 = dashboard_model.que_cut( $scope.q_1, { "topic": topic, "value" : mess } , 10 ); }
-                            if(topic == "quota_2"){ $scope.q_2 = dashboard_model.que_cut( $scope.q_2, { "topic": topic, "value" : mess } , 10 ); }
-                            if(topic == "quota_error"){ $scope.e_0 = dashboard_model.que_cut( $scope.e_0, { "topic": topic, "value" : mess } , 10 ); }
+                            let mess = new TextDecoder("utf-8").decode(message);
+
+                            let data_list = JSON.parse(mess);
+
+                            if(topic == "quota_0"){ $scope.q_0 = data_list }
+                            if(topic == "quota_1"){ $scope.q_1 = data_list }
+                            if(topic == "quota_2"){ $scope.q_2 = data_list }
+                            if(topic == "quota_error"){ $scope.e_0 = data_list }
 
                         });
                 
@@ -114,7 +117,7 @@ app.controller('dashboard_controller',[
 
         $interval(function() {
             quota_list();
-        }, 300);
+        }, 3600);
 
         $scope.quota_sort.q0 = 0;
         $scope.quota_sort.q1 = 0;

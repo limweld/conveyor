@@ -10,8 +10,6 @@ app.controller('generator_controller',[
     ){
         
         $scope.ranges = [
-        //    { id : -1, value : 2 },
-        //    { id : 0, value : 3 },
             { id : 1, value : 10 },
             { id : 2, value : 20 },
             { id : 3, value : 50 },
@@ -255,7 +253,7 @@ app.controller('generator_controller',[
                 password,
                 protocol_type,
                 description,
-                function(response){ console.log(response.data);
+                function(response){ 
                     if(response.status == 200){
                         $scope.connection.obj.loading_visibility = false;
                             
@@ -310,7 +308,7 @@ app.controller('generator_controller',[
         let logout = function( ){
             credential_model.logout(
                 function(response){ 
-                    if(response.status == 200){ console.log(response.data);
+                    if(response.status == 200){ 
                         if(response.data.validity){
                             location.reload();   
                         }
@@ -610,7 +608,6 @@ app.controller('generator_controller',[
                 $scope.connection.obj.description
             );
 
-            console.log("$scope.connection.obj.created_click");
         }
 
         $scope.connection.obj.update_click = function(){
@@ -630,7 +627,6 @@ app.controller('generator_controller',[
                 $scope.connection.obj.description
             );
 
-            console.log("$scope.connection.obj.update_click");
         }
 
         $scope.connection.obj.delete_click = function(){
