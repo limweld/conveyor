@@ -56,6 +56,8 @@ $router->group(['prefix' => 'conveyor'], function() use ($router) {
             $router->post('read','conveyor\DashboardController@read');
             $router->get('read/quota','conveyor\DashboardController@read_quota');
             $router->get('read/error','conveyor\DashboardController@read_error');
+            $router->get('read/quota/hourly_test','conveyor\DashboardController@read_quota_hourly_test');
+            $router->get('read/quota/hourly','conveyor\DashboardController@read_quota_hourly');
             $router->post('update','conveyor\DashboardController@update');
             $router->post('delete','conveyor\DashboardController@delete');
         });

@@ -1,6 +1,13 @@
-var app = angular.module('Dashboard', ['ngmqtt']).run(function(){
-    console.log("Angular application started");
-});
+var app = angular.module(
+        'Dashboard', 
+        [
+            'ngmqtt',
+            'chart.js'
+        ]
+    ).run(function(){
+        console.log("Angular application started");
+    }
+);
 
 app.controller('dashboard_controller',[ 
     '$scope',
@@ -110,6 +117,37 @@ app.controller('dashboard_controller',[
                 }
             );            
         }
+
+        $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+        $scope.series = ['LUZ', 'VIS', 'MIN', 'ERR'];
+        $scope.data = [
+          [65, 59, 80, 81, 56, 55, 40],
+          [28, 48, 40, 19, 86, 27, 90],
+          [65, 55, 87, 81, 96, 55, 40],
+          [65, 57, 60, 71, 56, 58, 40],
+        ];
+        $scope.onClick = function (points, evt) {
+          //console.log(points, evt);
+        };
+        $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+        $scope.options = {
+          scales: {
+            yAxes: [
+              {
+                id: 'y-axis-1',
+                type: 'linear',
+                display: true,
+                position: 'left'
+              },
+              {
+                id: 'y-axis-2',
+                type: 'linear',
+                display: false,
+                position: 'right'
+              }
+            ]
+          }
+        };
 
         $scope.logout_click = function(){
             logout();

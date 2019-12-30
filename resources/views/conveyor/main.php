@@ -111,54 +111,62 @@
          <!-- Icon Cards-->
          <div class="row">
 
-            
+          <div class="col-md-4 col-xl-3">
+              <div class="card bg-c-blue order-card">
+                  <div class="card-block">
+                      <h6 class="m-b-20">{{ quota_sort.t0 }}</h6>
+                      <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.q0 }}</span></h2>
+                      <p class="m-b-0">Total Sort Orders</p>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="col-md-4 col-xl-3">
+              <div class="card bg-c-green order-card">
+                  <div class="card-block">
+                      <h6 class="m-b-20">{{ quota_sort.t1 }}</h6>
+                      <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.q1 }}</span></h2>
+                      <p class="m-b-0">Total Sort Orders</p>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="col-md-4 col-xl-3">
+              <div class="card bg-c-yellow order-card">
+                  <div class="card-block">
+                      <h6 class="m-b-20">{{ quota_sort.t2 }}</h6>
+                      <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.q2 }}</span></h2>
+                      <p class="m-b-0">Total Sort Orders</p>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="col-md-4 col-xl-3">
+              <div class="card bg-c-pink order-card">
+                  <div class="card-block">
+                      <h6 class="m-b-20">{{ quota_sort.t3 }}</h6>
+                      <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.e0 }}</span></h2>
+                      <p class="m-b-0">Total Sort Orders</p>
+                  </div>
+              </div>
+          </div>
 
-
-         <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-blue order-card">
-                <div class="card-block">
-                    <h6 class="m-b-20">{{ quota_sort.t0 }}</h6>
-                    <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.q0 }}</span></h2>
-                    <p class="m-b-0">Total Sort Orders</p>
-                </div>
-            </div>
         </div>
-        
-        <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-green order-card">
-                <div class="card-block">
-                    <h6 class="m-b-20">{{ quota_sort.t1 }}</h6>
-                    <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.q1 }}</span></h2>
-                    <p class="m-b-0">Total Sort Orders</p>
+
+         <!-- Icon Cards-->
+        <div class="row">
+          <div class="col-xl-12 col-sm-12 mb-12" >
+            <div class="card text-white o-hidden" >
+              <div class="panel panel-default">
+                <div class="panel-heading">Line Chart</div>
+                <div class="panel-body">
+                  <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-click="onClick" chart-hover="onHover" chart-series="series" chart-options="options" chart-dataset-override="datasetOverride">
+                  </canvas>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-        
-        <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-yellow order-card">
-                <div class="card-block">
-                    <h6 class="m-b-20">{{ quota_sort.t2 }}</h6>
-                    <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.q2 }}</span></h2>
-                    <p class="m-b-0">Total Sort Orders</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-pink order-card">
-                <div class="card-block">
-                    <h6 class="m-b-20">{{ quota_sort.t3 }}</h6>
-                    <h2 class="text-right"><i class="fa fa-barcode f-left"></i><span>{{ quota_sort.e0 }}</span></h2>
-                    <p class="m-b-0">Total Sort Orders</p>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-         </div>
 
         <!-- Icon Cards-->
         <div class="row">
@@ -281,6 +289,9 @@
   <script src="js/angular-animate.min.js"></script>
   <script src="js/angular-sanitize.min.js"></script>
   <script src="js/angular-momentjs.min.js"></script>
+
+  <script type="text/javascript" src="resources/node_modules/chart.js/dist/Chart.min.js"></script>
+  <script type="text/javascript" src="resources/node_modules/angular-chart.js/angular-chart.js"></script>
 
   <script type="text/javascript" src="resources/node_modules/ngmqtt/browserMqtt.js"></script>
   <script type="text/javascript" src="resources/node_modules/ngmqtt/ngmqtt.js"></script>
