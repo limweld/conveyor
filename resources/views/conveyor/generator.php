@@ -51,7 +51,7 @@
 
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
-      <li class="nav-item dropdown no-arrow">
+      <li class="nav-item dropdown no-arrow time">
         <a class="nav-link dropdown-toggle no-arrow" href="#" id="userDropdown"  aria-expanded="false">
             {{ today | date : "MMM d, y" }} {{ today | date : "h:mm:ss a" }}
         </a>     

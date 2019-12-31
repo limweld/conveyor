@@ -31,8 +31,7 @@
   <link href="../css/dashboard.css" rel="stylesheet">
 
   <!-- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> -->
-
-
+ 
 </head>
 
 <body id="page-top" ng-controller="dashboard_controller">
@@ -57,7 +56,7 @@
 
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
-      <li class="nav-item dropdown no-arrow">
+      <li class="nav-item dropdown no-arrow time">
         <a class="nav-link dropdown-toggle no-arrow" href="#" id="userDropdown"  aria-expanded="false">
             {{ today | date : "MMM d, y" }} {{ today | date : "h:mm:ss a" }}
         </a>     
@@ -157,7 +156,7 @@
         </div>
 
          <!-- Icon Cards-->
-        <div class="row">
+        <div class="row time">
           <div class="col-xl-12 col-sm-12 mb-12" >
             <div class="card text-white o-hidden" >
               <div class="panel panel-default">
