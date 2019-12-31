@@ -2,10 +2,12 @@ var app = angular.module('Generator', []);
 app.controller('generator_controller',[ 
     '$scope',
     '$window',
+    '$interval', 
     'credential_model',
     function(
         $scope,
         $window,
+        $interval, 
         credential_model
     ){
         
@@ -639,6 +641,10 @@ app.controller('generator_controller',[
                 $scope.connection.obj.id
             );
         }
+
+        $interval(function() {
+            $scope.today = Date.now();
+        }, 1000);
 
         $scope.user.selected = $scope.ranges[0];
         $scope.connection.selected = $scope.ranges[0];

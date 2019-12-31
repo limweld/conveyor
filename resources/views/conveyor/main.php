@@ -57,11 +57,14 @@
 
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
-     
-     
+      <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle no-arrow" href="#" id="userDropdown"  aria-expanded="false">
+            {{ today | date : "MMM d, y" }} {{ today | date : "h:mm:ss a" }}
+        </a>     
+      </li>
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <?php echo $_SESSION["fullname"]." "; ?><i class="fas fa-user-circle fa-fw"></i>
+          <b><?php echo $_SESSION["fullname"]." "; ?><i class="fas fa-user-circle fa-fw"></i></b>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>

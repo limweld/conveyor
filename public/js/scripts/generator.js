@@ -2,10 +2,12 @@ var app = angular.module('Generator', []);
 app.controller('generator_controller',[ 
     '$scope',
     '$window',
+    '$interval', 
     'generator_model',
     function(
         $scope,
         $window,
+        $interval, 
         generator_model
     ){
         
@@ -614,6 +616,10 @@ app.controller('generator_controller',[
         $scope.logout_click = function(){
             logout();
         }
+
+        $interval(function() {
+            $scope.today = Date.now();
+        }, 1000);
 
         $scope.scanned.selected = $scope.ranges[0];
         $scope.unscanned.selected = $scope.ranges[0];

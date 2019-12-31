@@ -51,7 +51,7 @@
                 </tr>
                 <tr>
                     <td colspan=2 align="center">
-                       <div ng-show="login.error_visibility" class="alert alert-danger sm"><small>{{login.error_desc}}</small></div>
+                       <div ng-show="login.error_visibility" class="alert {{ login.error_color }} sm"><small>{{login.error_desc}}</small></div>
                     </td>
                 </tr>
                 <tr>
@@ -111,6 +111,7 @@
 		            if(response.status == 200){
                      
                         if(response.data.validity){
+                            $scope.login.error_color = "alert-success";
                             $scope.login.error_visibility = true;
                             $scope.login.error_desc = response.data.message;
                             location.reload();
@@ -118,6 +119,7 @@
                         }
 
                         $scope.login.login_btn_disabled = false;
+                        $scope.login.error_color = "alert-danger";
                         $scope.login.error_visibility = true;
                         $scope.login.error_desc = response.data.message;
                         $scope.login.loading = false;

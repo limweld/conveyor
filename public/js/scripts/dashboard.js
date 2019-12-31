@@ -9,6 +9,13 @@ var app = angular.module(
     }
 );
 
+app.config(['ChartJsProvider', function (ChartJsProvider) {
+    ChartJsProvider.setOptions({
+      chartColors: ['#FF5370', '#4099ff', '#2ed8b6', '#ffcb80'],
+      responsive: true
+    });
+}])
+
 app.controller('dashboard_controller',[ 
     '$scope',
     '$timeout',
@@ -79,7 +86,6 @@ app.controller('dashboard_controller',[
                         ngmqtt.listenConnection(
                             "dashboard_controller", 
                             function(){
-                                console.log("connected");
                                 ngmqtt.subscribe('code_messages');
                                 ngmqtt.subscribe($scope.connection[0].topic);
                                 ngmqtt.subscribe($scope.connection[1].topic);
@@ -106,6 +112,19 @@ app.controller('dashboard_controller',[
             );
         }
 
+        let quota_list_hourly = function( ){
+            dashboard_model.quota_list_hourly(
+                function(response){
+                    if(response.status == 200){
+                        let obj = response.data;
+                        $scope.labels = obj.labels;
+                        $scope.series = obj.series;
+                        $scope.data = obj.data;
+                    }
+                }
+            );
+        }
+
         let logout = function( ){
             dashboard_model.logout(
                 function(response){ 
@@ -118,14 +137,9 @@ app.controller('dashboard_controller',[
             );            
         }
 
-        $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-        $scope.series = ['LUZ', 'VIS', 'MIN', 'ERR'];
-        $scope.data = [
-          [65, 59, 80, 81, 56, 55, 40],
-          [28, 48, 40, 19, 86, 27, 90],
-          [65, 55, 87, 81, 96, 55, 40],
-          [65, 57, 60, 71, 56, 58, 40],
-        ];
+        $scope.labels = [];
+        $scope.series = [];
+        $scope.data = [];
         $scope.onClick = function (points, evt) {
           //console.log(points, evt);
         };
@@ -154,8 +168,16 @@ app.controller('dashboard_controller',[
         }
 
         $interval(function() {
+            $scope.today = Date.now();
+        }, 1000);
+
+        $interval(function() {
             quota_list();
         }, 3600);
+
+        $interval(function() {
+            quota_list_hourly();
+        }, 7200);
 
         $scope.quota_sort.q0 = 0;
         $scope.quota_sort.q1 = 0;
@@ -165,6 +187,8 @@ app.controller('dashboard_controller',[
 
         $scope.quota_sort.e0 = 0;
 
+        quota_list();
+        quota_list_hourly();
         connection_list('qu',1,5);
     }
 ]).factory('dashboard_model',[
@@ -208,6 +232,19 @@ app.controller('dashboard_controller',[
 		){
 			$http.get(
                 'conveyor/api/v1/dashboard/read/quota',
+                {  
+                }
+			).then(
+			   function(response){ callback(response); }, 
+			   function(response){ callback(response); }
+			);			
+        }
+
+        service.quota_list_hourly = function(
+			callback		
+		){
+			$http.get(
+                'conveyor/api/v1/dashboard/read/quota/hourly',
                 {  
                 }
 			).then(
