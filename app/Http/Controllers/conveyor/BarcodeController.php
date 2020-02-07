@@ -77,11 +77,12 @@ class BarcodeController extends Controller
 
                 $row = $key + 1;
 
-                $pdf->write1DBarcode($data_obj->barcode_id, 'C39', '', '', '', 21 , 0.28, $style, $row%3 == 0 ? 'N' : 'T');
+                $pdf->write1DBarcode($data_obj->barcode_id, 'C39', '', '', '', 34 , 0.40, $style, $row%2 == 0 ? 'N' : 'T');
             }
 
+            $filename = $batch_barcode[0]->sortercode .'_'. $batch_barcode[0]->batch_id .'_'.  $batch_barcode[0]->created_at;
 
-            $pdf->Output('Barcodes', 'I');
+            $pdf->Output($filename  . '.pdf', 'I');
 
         }
                     
